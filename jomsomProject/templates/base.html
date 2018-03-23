@@ -36,7 +36,7 @@
     			<ul class="nav navbar-nav navbar-right">
     				{% if user.is_authenticated %}
     				<!-- url of logout can't be like signUp and login because we need POST method
-    					and we can't put form inside a tag. Solution is as follows
+    					and we can't put form inside <a> tag. Solution is as follows
     				-->
     					<li><a href="#" onclick="document.getElementById('logoutForm').submit()">Logout</a></li>
     					<form id="logoutForm" method="POST" action="{% url 'accounts:logout' %}">

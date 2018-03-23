@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib.auth.models import User
+
 from .models import Post
+
+
 
 # Create your views here.
 @login_required # if not logged in, redirect to login.html and add next element in url
@@ -34,6 +38,8 @@ def home(request):
     return render(request, 'posts/home.html', {'posts': posts})
 
 def upvote(request, pk):
+    # if method is GET, browser read url and execute it even before hitting enter key
+    # So, it ends up executing GET request multiple times 
     if request.method == 'POST':
         post = Post.objects.get(pk=pk)
         post.votes_total += 1
@@ -46,3 +52,9 @@ def downvote(request, pk):
         post.votes_total -= 1
         post.save()
         return redirect('home') 
+
+def postby(request, user_id): # instead of id, could use username but username might change
+    posts = Post.objects.filter(author__id=user_id).order_by('-votes_total') # author__id came from User object thru foreign relation ????
+    user = User.objects.get(pk=user_id)
+    return render(request,'posts/postby.html', {'posts': posts, 'user': user}) 
+
